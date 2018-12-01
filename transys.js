@@ -1,6 +1,26 @@
 import * as R from 'ramda'
 import reduceReducers from 'reduce-reducers'
 
+/**
+ * Construct a transition system reducer from a list of states, a transition
+ * matrix and initial state.
+ *
+ * @param {Array<Symbol>} states The list of states between which the system
+ *   should transition.
+ *
+ * @param {from?: Symbol, to?: Symbol, do?: Function} transitionMatrix The ele-
+ *   ments in this matrix are used to construct the reducer rules. Each element
+ *   can have
+ *     - a `from` criterium, which is compared to the current state
+ *     - a `to` criterium, which is compared with the type of the reduced action
+ *     - a `do` function, which is executed, if the transition applies
+ *   The state is changed if the action type is a valid state in the system and
+ *   if a matching transition exists in the matrix.
+ *
+ * @param {Symbol} systemState The transition system's initial state.
+ *
+ * @return {Function} A reducer for use in a redux store.
+ */
 const buildReducer = ({
   states,
   transitionMatrix,
@@ -60,6 +80,11 @@ const buildReducer = ({
   )
 }
 
+/**
+ * Provides a number of utility methods on the redux store.
+ *
+ * @param {Function} createStore Redux' store creator.
+ */
 const enhancer = createStore => (...args) => {
   const store = createStore(...args)
 
