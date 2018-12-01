@@ -21,6 +21,6 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}-{{ checksum "yarn.lock" }}
 
-      - run: yarn run test
+      - run: yarn run test:ci
 
 
