@@ -13,7 +13,7 @@ const buildReducer = ({
     throw new Error('`states` must be an array of states.')
   }
 
-  if (states === []) {
+  if (states.length === 0) {
     throw new Error('At least one `state` must be provided.')
   }
 
@@ -25,12 +25,14 @@ const buildReducer = ({
     throw new Error('`states` must contain `systemState`.')
   }
 
+  transitionMatrix.forEach(transition => {
+    if ('do' in transition && typeof transition.do !== 'function') {
+      throw new Error('transition.do must either be of type function or undefined')
+    }
+  })
+
   return reduceReducers(
     ...R.map(transition => (state, action) => {
-      if ('do' in transition && typeof transition.do !== 'function') {
-        throw new Error('transition.do must either be of type function or undefined')
-      }
-
       /*
          * If a from/to is set, it must match the context for the reducer to be
          * applied.
